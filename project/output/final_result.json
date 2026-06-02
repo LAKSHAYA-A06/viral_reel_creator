@@ -1,0 +1,27 @@
+{
+  "trend": {
+    "title": "#fyp @Zack D. Films",
+    "channel": "Jordan The Stallion Fans",
+    "tags": [],
+    "thumbnail": "https://i.ytimg.com/vi/R6x-5NzuIRo/hqdefault.jpg",
+    "video_url": "https://youtube.com/watch?v=R6x-5NzuIRo",
+    "views": 24521583,
+    "likes": 1342498,
+    "comments": 3071,
+    "trend_score": 12664155.1,
+    "category": "How-to & Style"
+  },
+  "script": "HOOK: What's up, Jordan The Stallion fans, are you ready to level up your style game?\n\nSTORY: \n1. First, let's talk about confidence - own that outfit like Jordan owns the stage.\n2. Next, accessorize like a pro - from chains to hats, complete your look with bold pieces.\n3. Lastly, don't be afraid to experiment - try new styles, take risks, and make a statement like Jordan does in his music videos.\n\nCTA: Now, show me your best Jordan-inspired look and tag me, use #StallionStyle, and let's get this trend going!",
+  "audio_path": "output/voiceover.mp3",
+  "thumbnail_path": "output/thumbnail.jpg",
+  "virality": {
+    "virality_score": 74.9,
+    "predicted_views": 37450,
+    "predicted_likes": 1872,
+    "predicted_shares": 1123,
+    "predicted_saves": 749,
+    "sentiment": 0.16,
+    "hook_score": 1.0
+  },
+  "captions": "INSTAGRAM: Film magic happens @Zack D. Films\nHASHTAGS: #fyp #ZackDFilms #FilmMaking #Cinematography #VideoProduction\nLINKEDIN: Zack D. Films has garnered an impressive 24.5 million views, a testament to the power of compelling storytelling and high-quality visual content. This achievement highlights the importance of creative vision and technical expertise in the film industry, inspiring professionals to push the boundaries of their craft."
+}

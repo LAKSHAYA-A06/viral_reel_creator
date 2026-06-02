@@ -1,0 +1,1200 @@
+
+
+<!doctype html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>Viral Reel Agent</title> <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wg
+
+pasted
+
+flow the instrutions and upgrade the code
+
+9:28 PM
+
+Reading the frontend design skill
+Reading the frontend design skill
+Now let me analyze the existing code and build the upgraded Scripts page with voice and thumbnail generation features.
+
+Now I have everything I need. Let me build the upgraded HTML with voice preview and thumbnail generation added to the Scripts page.
+
+
+Upgraded Viral Reel Agent with voice preview and AI thumbnail generation on the Scripts page
+Upgraded Viral Reel Agent with voice preview and AI thumbnail generation on the Scripts page
+
+Upgraded Viral Reel Agent with voice preview and AI thumbnail generation on the Scripts page
+html
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Viral Reel Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #09090f; --s1: #111118; --s2: #18181f; --s3: #22222c;
+        --b1: rgba(255,255,255,.06); --b2: rgba(255,255,255,.11); --b3: rgba(255,255,255,.18);
+        --t1: #eeeef5; --t2: #9090aa; --t3: #55556a;
+        --purple: #7c6ef5; --purple-dim: rgba(124,110,245,.15); --purple-text: #a99cf7;
+        --green: #4de8a0; --green-dim: rgba(77,232,160,.12); --green-text: #4de8a0;
+        --amber: #f5a94a; --amber-dim: rgba(245,169,74,.12); --amber-text: #f5a94a;
+        --red: #f56060; --red-dim: rgba(245,96,96,.1); --red-text: #f56060;
+        --blue: #60a8f5; --blue-dim: rgba(96,168,245,.1);
+        --mono: "Space Mono", monospace; --sans: "DM Sans", sans-serif;
+        --r: 10px; --r2: 14px;
+      }
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{height:100%;overflow:hidden}
+      body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:13px;display:flex}
+
+      /* SIDEBAR */
+      .sb{width:230px;min-width:230px;background:var(--s1);border-right:1px solid var(--b1);display:flex;flex-direction:column;overflow:hidden}
+      .sb-logo{display:flex;align-items:center;gap:10px;padding:20px 18px 16px;border-bottom:1px solid var(--b1)}
+      .sb-logo-icon{width:34px;height:34px;background:var(--purple);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+      .sb-logo-text{font-family:var(--mono);font-size:13px;font-weight:700;line-height:1.2}
+      .sb-logo-sub{font-size:10px;color:var(--t3);font-family:var(--sans);font-weight:400}
+      .sb-nav{padding:10px;flex:1;overflow-y:auto}
+      .sb-section{font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;padding:12px 8px 5px}
+      .nav-btn{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--t2);transition:all .15s;border:none;background:transparent;width:100%;font-family:var(--sans);font-size:13px}
+      .nav-btn:hover{background:var(--s2);color:var(--t1)}
+      .nav-btn.active{background:var(--purple-dim);color:var(--purple-text)}
+      .nav-icon{font-size:15px;flex-shrink:0}
+      .nav-badge{margin-left:auto;font-size:10px;padding:1px 7px;border-radius:10px;background:var(--purple-dim);color:var(--purple-text)}
+      .sb-bottom{padding:12px;border-top:1px solid var(--b1)}
+      .api-box{background:var(--s2);border-radius:var(--r);padding:12px;border:1px solid var(--b1)}
+      .api-box-title{font-size:11px;font-weight:500;margin-bottom:8px;color:var(--t2)}
+      .api-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2);margin-bottom:5px}
+      .api-row:last-child{margin-bottom:0}
+      .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;animation:blink 2s infinite}
+      .dot.green{background:var(--green)} .dot.amber{background:var(--amber)} .dot.red{background:var(--red)}
+      @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+      /* MAIN */
+      .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+      .topbar{display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--b1);background:var(--s1);flex-shrink:0}
+      .topbar-title{font-size:16px;font-weight:500;flex:1}
+      .topbar-sub{font-size:11px;color:var(--t3);margin-top:1px}
+      .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--sans);transition:all .15s;border:1px solid var(--b2);background:transparent;color:var(--t1);white-space:nowrap}
+      .btn:hover{background:var(--s2)}
+      .btn:disabled{opacity:.45;cursor:not-allowed}
+      .btn-purple{background:var(--purple);border-color:var(--purple);color:#fff}
+      .btn-purple:hover{background:#6a5de0;border-color:#6a5de0}
+      .btn-green{background:var(--green-dim);border-color:rgba(77,232,160,.3);color:var(--green-text)}
+      .btn-amber{background:var(--amber-dim);border-color:rgba(245,169,74,.3);color:var(--amber-text)}
+
+      /* PAGES */
+      .page{display:none;flex:1;overflow-y:auto;padding:22px 24px}
+      .page.active{display:flex;flex-direction:column;gap:18px}
+
+      /* STAT CARDS */
+      .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+      .stat{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:14px 16px}
+      .stat-label{font-size:11px;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+      .stat-val{font-size:24px;font-weight:500;font-family:var(--mono);color:var(--t1)}
+      .stat-sub{font-size:11px;color:var(--t3);margin-top:4px}
+      .stat-sub.up{color:var(--green-text)}
+
+      /* SECTION HEADER */
+      .sec-hdr{display:flex;align-items:center;justify-content:space-between}
+      .sec-title{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.07em}
+
+      /* TREND CARDS */
+      .trend-card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;transition:border-color .15s}
+      .trend-card:hover{border-color:var(--b2)}
+      .trend-card.best{border-color:rgba(124,110,245,.45)}
+      .tc-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}
+      .rank{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:var(--mono);flex-shrink:0}
+      .r1{background:var(--green-dim);color:var(--green-text)} .r2{background:var(--purple-dim);color:var(--purple-text)} .r3{background:var(--amber-dim);color:var(--amber-text)}
+      .tc-info{flex:1;min-width:0}
+      .tc-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--t1)}
+      .tc-meta{display:flex;align-items:center;gap:7px;margin-top:3px}
+      .pill{font-size:10px;padding:2px 8px;border-radius:10px;white-space:nowrap}
+      .pill-p{background:var(--purple-dim);color:var(--purple-text)} .pill-g{background:var(--green-dim);color:var(--green-text)}
+      .pill-a{background:var(--amber-dim);color:var(--amber-text)} .pill-b{background:var(--blue-dim);color:var(--blue)}
+      .tc-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+      .bar-group{display:flex;flex-direction:column;gap:5px;min-width:160px}
+      .bar-row{display:flex;align-items:center;gap:7px}
+      .bar-lbl{font-size:10px;color:var(--t3);width:72px;flex-shrink:0}
+      .bar-bg{flex:1;height:3px;background:var(--b1);border-radius:2px;overflow:hidden}
+      .bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
+      .bar-val{font-size:10px;color:var(--t2);width:28px;text-align:right;flex-shrink:0}
+      .vring{position:relative;width:44px;height:44px;flex-shrink:0}
+      .vring svg{transform:rotate(-90deg)}
+      .vring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)}
+      .chev{color:var(--t3);font-size:14px;transition:transform .2s;flex-shrink:0}
+      .chev.open{transform:rotate(180deg)}
+      .tc-body{display:none;border-top:1px solid var(--b1);padding:16px 18px}
+      .tc-body.open{display:block}
+      .tc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+      .mini-box{background:var(--s2);border-radius:var(--r);padding:12px 14px;border:1px solid var(--b1)}
+      .mini-title{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+      .script-block{font-size:12px;line-height:1.75;color:var(--t2)}
+      .script-block b{color:var(--purple-text);font-weight:500}
+      .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+      .tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--purple-dim);color:var(--purple-text)}
+      .tc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--b1)}
+      .yt-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--red-text);text-decoration:none;padding:5px 10px;border-radius:6px;border:1px solid rgba(245,96,96,.2);transition:background .15s}
+      .yt-link:hover{background:var(--red-dim)}
+
+      /* SCRIPTS PAGE */
+      .gen-box{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:18px}
+      .gen-label{font-size:11px;color:var(--t3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+      .gen-input{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:10px 14px;color:var(--t1);font-family:var(--sans);font-size:13px;outline:none;resize:none;transition:border-color .15s}
+      .gen-input:focus{border-color:var(--purple)}
+      .gen-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+      .select-style{background:var(--s2);border:1px solid var(--b2);border-radius:8px;padding:7px 12px;color:var(--t1);font-family:var(--sans);font-size:12px;outline:none;cursor:pointer}
+      .output-box{background:var(--s2);border-radius:var(--r);padding:16px;font-size:13px;line-height:1.8;color:var(--t2);min-height:120px;white-space:pre-wrap;border:1px solid var(--b1)}
+      .output-section{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:10px}
+      .copy-bar{display:flex;align-items:center;justify-content:space-between}
+
+      /* CAPTIONS PAGE */
+      .cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .cap-card{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:16px;display:flex;flex-direction:column;gap:10px}
+      .cap-platform{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500}
+      .cap-platform-icon{font-size:18px}
+      .cap-output{background:var(--s2);border-radius:8px;padding:12px;font-size:12px;line-height:1.75;color:var(--t2);min-height:80px;white-space:pre-wrap;border:1px solid var(--b1)}
+
+      /* LOADING */
+      .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(124,110,245,.3);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      .loading-row{display:flex;align-items:center;gap:8px;color:var(--t3);font-size:12px}
+
+      /* EMPTY */
+      .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--t3);text-align:center}
+      .empty-icon{font-size:32px;opacity:.4}
+      .empty-text{font-size:13px}
+
+      /* TOAST */
+      .toast{position:fixed;bottom:20px;right:20px;background:var(--s3);border:1px solid var(--b2);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);display:flex;align-items:center;gap:8px;z-index:999;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+      .toast.show{opacity:1;transform:translateY(0)}
+      .char-count{font-size:10px;color:var(--t3);text-align:right;margin-top:3px}
+      .char-count.over{color:var(--red-text)}
+
+      /* VIRALITY METER */
+      .virality-meter{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:16px}
+      .vm-label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+      .vm-bars{display:flex;flex-direction:column;gap:8px}
+      .vm-row{display:flex;align-items:center;gap:10px}
+      .vm-name{font-size:11px;color:var(--t2);width:100px;flex-shrink:0}
+      .vm-bar-bg{flex:1;height:6px;background:var(--b1);border-radius:3px;overflow:hidden}
+      .vm-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+      .vm-score{font-size:11px;font-family:var(--mono);color:var(--t1);width:32px;text-align:right}
+
+      /* ═══ VOICE PANEL ═══ */
+      .voice-panel{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:14px}
+      .voice-panel-header{display:flex;align-items:center;justify-content:space-between}
+      .voice-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--t1)}
+      .voice-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--purple-dim);color:var(--purple-text)}
+      .voice-controls{display:flex;flex-direction:column;gap:10px}
+      .voice-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+      .voice-select-label{font-size:11px;color:var(--t3);flex-shrink:0;width:70px}
+      .voice-player{display:none;width:100%;height:40px;border-radius:8px;accent-color:var(--purple)}
+      .voice-player.show{display:block}
+      .voice-waveform{height:48px;background:var(--s2);border:1px solid var(--b1);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:2px;padding:10px 14px;overflow:hidden}
+      .wv-bar{width:3px;border-radius:2px;background:var(--purple);transition:height .1s}
+      .speed-slider{-webkit-appearance:none;width:100px;height:4px;border-radius:2px;background:var(--b2);outline:none;cursor:pointer}
+      .speed-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--purple);cursor:pointer}
+
+      /* ═══ THUMBNAIL PANEL ═══ */
+      .thumb-panel{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:18px;display:flex;flex-direction:column;gap:14px}
+      .thumb-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+      .thumb-canvas-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+      .thumb-card{background:var(--s2);border-radius:var(--r);border:1px solid var(--b1);overflow:hidden;cursor:pointer;transition:border-color .15s;position:relative}
+      .thumb-card:hover{border-color:var(--purple)}
+      .thumb-card.selected{border-color:var(--purple);border-width:2px}
+      .thumb-canvas{width:100%;aspect-ratio:9/16;display:block}
+      .thumb-label{font-size:10px;color:var(--t3);text-align:center;padding:6px;background:var(--s1);border-top:1px solid var(--b1)}
+      .thumb-selected-badge{position:absolute;top:6px;right:6px;background:var(--purple);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-family:var(--mono)}
+      .thumb-download-row{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+
+      /* ═══ SECTION DIVIDER ═══ */
+      .section-divider{display:flex;align-items:center;gap:10px;margin:4px 0}
+      .divider-line{flex:1;height:1px;background:var(--b1)}
+      .divider-text{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+
+      /* ═══ WAVEFORM ANIMATION ═══ */
+      @keyframes wave{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+      .wv-bar.playing{animation:wave .8s ease-in-out infinite}
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sb">
+      <div class="sb-logo">
+        <div class="sb-logo-icon">🎬</div>
+        <div>
+          <div class="sb-logo-text">REEL.AI</div>
+          <div class="sb-logo-sub">Viral Reel Agent</div>
+        </div>
+      </div>
+      <nav class="sb-nav">
+        <div class="sb-section">Main</div>
+        <button class="nav-btn active" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</button>
+        <button class="nav-btn" onclick="showPage('trends',this)"><span class="nav-icon">🔥</span> Trends<span class="nav-badge" id="trend-count">0</span></button>
+        <button class="nav-btn" onclick="showPage('scripts',this)"><span class="nav-icon">✍️</span> Scripts</button>
+        <button class="nav-btn" onclick="showPage('captions',this)"><span class="nav-icon">📸</span> Captions</button>
+        <button class="nav-btn" onclick="showPage('virality',this)"><span class="nav-icon">📈</span> Virality</button>
+        <div class="sb-section">Settings</div>
+        <button class="nav-btn" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span> Settings</button>
+      </nav>
+      <div class="sb-bottom">
+        <div class="api-box">
+          <div class="api-box-title">API Status</div>
+          <div class="api-row"><span class="dot green" id="dot-yt"></span> YouTube API</div>
+          <div class="api-row"><span class="dot green" id="dot-groq"></span> Groq LLaMA</div>
+          <div class="api-row"><span class="dot amber" id="dot-flask"></span> Flask :5000</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <div style="flex:1">
+          <div class="topbar-title" id="page-title">Dashboard</div>
+          <div class="topbar-sub" id="page-sub">Overview of your viral reel agent</div>
+        </div>
+        <button class="btn" onclick="checkFlaskHealth()" id="health-btn">⚡ API Health</button>
+        <button class="btn btn-purple" onclick="fetchAllTrends()" id="refresh-btn">↻ Refresh Trends</button>
+      </div>
+
+      <!-- DASHBOARD PAGE -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-row">
+          <div class="stat"><div class="stat-label">🔥 Trends found</div><div class="stat-val" id="stat-trends">—</div><div class="stat-sub">from YouTube</div></div>
+          <div class="stat"><div class="stat-label">👁 Total views</div><div class="stat-val" id="stat-views">—</div><div class="stat-sub up">live data</div></div>
+          <div class="stat"><div class="stat-label">🏆 Best virality</div><div class="stat-val" id="stat-best">—</div><div class="stat-sub">/100 score</div></div>
+          <div class="stat"><div class="stat-label">📊 Est. reach</div><div class="stat-val" id="stat-reach">—</div><div class="stat-sub">predicted views</div></div>
+        </div>
+        <div class="sec-hdr">
+          <div class="sec-title">Top trending reels</div>
+          <button class="btn" onclick="showPage('trends',document.querySelectorAll('.nav-btn')[1])">View all →</button>
+        </div>
+        <div id="dash-cards" style="display:flex;flex-direction:column;gap:10px">
+          <div class="empty"><div class="empty-icon">📡</div><div class="empty-text">Click "Refresh Trends" to fetch live YouTube trends</div></div>
+        </div>
+      </div>
+
+      <!-- TRENDS PAGE -->
+      <div class="page" id="page-trends">
+        <div class="sec-hdr">
+          <div class="sec-title">All trending topics</div>
+          <button class="btn btn-green" onclick="fetchAllTrends()">↻ Fetch fresh trends</button>
+        </div>
+        <div id="trends-list" style="display:flex;flex-direction:column;gap:10px">
+          <div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">No trends loaded yet — click Refresh Trends</div></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SCRIPTS PAGE (UPGRADED) ═══════════════ -->
+      <div class="page" id="page-scripts">
+
+        <!-- Input box -->
+        <div class="gen-box">
+          <div class="gen-label">Topic / Trend</div>
+          <textarea class="gen-input" id="script-topic" rows="2" placeholder="e.g. How we built an alien pool with 22M views on YouTube..."></textarea>
+          <div class="gen-row">
+            <select class="select-style" id="script-style">
+              <option value="viral">🔥 Viral / Punchy</option>
+              <option value="educational">📚 Educational</option>
+              <option value="storytelling">📖 Storytelling</option>
+              <option value="trending">📈 Trending Hook</option>
+            </select>
+            <select class="select-style" id="script-duration">
+              <option value="30">⏱ 30 seconds</option>
+              <option value="60">⏱ 60 seconds</option>
+              <option value="15">⏱ 15 seconds</option>
+            </select>
+            <button class="btn btn-purple" id="gen-script-btn" onclick="generateScript()">✨ Generate Script</button>
+            <button class="btn" onclick="loadTopTrend('script-topic')">📥 Load top trend</button>
+          </div>
+        </div>
+
+        <!-- Script Output -->
+        <div class="output-section" id="script-output-section">
+          <div class="copy-bar">
+            <div class="sec-title">Generated Script</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn" onclick="copyOutput('script-output')">⎘ Copy</button>
+            </div>
+          </div>
+          <div class="output-box" id="script-output">
+            <div class="empty" style="padding:20px 0">
+              <div class="empty-icon" style="font-size:24px">✍️</div>
+              <div class="empty-text">Enter a topic and click Generate Script</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hook / CTA Breakdown -->
+        <div style="display:none;grid-template-columns:1fr 1fr;gap:12px" id="script-breakdown">
+          <div class="output-section">
+            <div class="sec-title" style="color:var(--amber-text)">🎣 Hook analysis</div>
+            <div class="output-box" id="hook-output" style="min-height:80px;font-size:12px"></div>
+          </div>
+          <div class="output-section">
+            <div class="sec-title" style="color:var(--green-text)">📣 CTA analysis</div>
+            <div class="output-box" id="cta-output" style="min-height:80px;font-size:12px"></div>
+          </div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="section-divider"><div class="divider-line"></div><div class="divider-text">🎙 Voice Preview</div><div class="divider-line"></div></div>
+
+        <!-- ═══ VOICE PANEL ═══ -->
+        <div class="voice-panel" id="voice-panel">
+          <div class="voice-panel-header">
+            <div class="voice-title">
+              🎙 Voice Preview
+              <span class="voice-badge">Browser TTS</span>
+            </div>
+            <button class="btn" id="voice-regen-btn" onclick="previewVoice()" disabled>▶ Preview Voice</button>
+          </div>
+
+          <div class="voice-controls">
+            <div class="voice-row">
+              <span class="voice-select-label">Voice</span>
+              <select class="select-style" id="voice-select" style="flex:1"></select>
+            </div>
+            <div class="voice-row">
+              <span class="voice-select-label">Speed</span>
+              <input type="range" class="speed-slider" id="voice-speed" min="0.5" max="2" step="0.1" value="1.1" oninput="document.getElementById('speed-val').textContent=this.value+'x'">
+              <span id="speed-val" style="font-size:11px;color:var(--t2);width:36px">1.1x</span>
+              <span class="voice-select-label" style="margin-left:12px">Pitch</span>
+              <input type="range" class="speed-slider" id="voice-pitch" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('pitch-val').textContent=this.value+'x'">
+              <span id="pitch-val" style="font-size:11px;color:var(--t2);width:36px">1.0x</span>
+            </div>
+            <div class="voice-row">
+              <span class="voice-select-label">Section</span>
+              <select class="select-style" id="voice-section">
+                <option value="full">Full Script</option>
+                <option value="hook">Hook Only</option>
+                <option value="story">Story Only</option>
+                <option value="cta">CTA Only</option>
+              </select>
+              <button class="btn btn-amber" id="voice-stop-btn" onclick="stopVoice()" style="display:none">■ Stop</button>
+              <button class="btn btn-green" onclick="downloadVoice()">⬇ Export MP3</button>
+            </div>
+          </div>
+
+          <!-- Waveform visualiser -->
+          <div class="voice-waveform" id="voice-waveform">
+            <span style="font-size:11px;color:var(--t3)">Generate a script to enable voice preview</span>
+          </div>
+
+          <!-- Status bar -->
+          <div id="voice-status" style="font-size:11px;color:var(--t3);display:flex;align-items:center;gap:6px"></div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="section-divider"><div class="divider-line"></div><div class="divider-text">🖼 Thumbnail Generator</div><div class="divider-line"></div></div>
+
+        <!-- ═══ THUMBNAIL PANEL ═══ -->
+        <div class="thumb-panel" id="thumb-panel">
+          <div class="voice-panel-header">
+            <div class="voice-title">
+              🖼 Thumbnail Generator
+              <span class="voice-badge">AI Canvas</span>
+            </div>
+            <button class="btn btn-purple" id="gen-thumb-btn" onclick="generateThumbnails()" disabled>🎨 Generate Thumbnails</button>
+          </div>
+
+          <div class="thumb-controls">
+            <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+              <div class="gen-label">Thumbnail text override (optional)</div>
+              <input class="gen-input" id="thumb-text" placeholder="Auto-extracts hook from script..." style="height:36px;padding:6px 12px;resize:none">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div class="gen-label">Style</div>
+              <select class="select-style" id="thumb-style">
+                <option value="bold">🔥 Bold Text</option>
+                <option value="cinematic">🎬 Cinematic</option>
+                <option value="minimal">✨ Minimal</option>
+              </select>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div class="gen-label">Color</div>
+              <select class="select-style" id="thumb-color">
+                <option value="purple">🟣 Purple</option>
+                <option value="fire">🔴 Fire</option>
+                <option value="neon">🟢 Neon</option>
+                <option value="gold">🟡 Gold</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Canvas grid -->
+          <div class="thumb-canvas-wrap" id="thumb-canvas-wrap">
+            <div class="empty" style="grid-column:1/-1;padding:30px">
+              <div class="empty-icon" style="font-size:28px">🖼</div>
+              <div class="empty-text">Generate a script first, then create thumbnails</div>
+            </div>
+          </div>
+
+          <!-- Download row -->
+          <div class="thumb-download-row" id="thumb-download-row" style="display:none">
+            <span style="font-size:11px;color:var(--t3)">Selected variant:</span>
+            <span id="thumb-selected-label" style="font-size:11px;color:var(--purple-text)">—</span>
+            <button class="btn btn-green" onclick="downloadSelectedThumb()">⬇ Download PNG (9:16)</button>
+            <button class="btn" onclick="downloadAllThumbs()">⬇ Download All (3)</button>
+          </div>
+        </div>
+
+      </div>
+      <!-- END SCRIPTS PAGE -->
+
+      <!-- CAPTIONS PAGE -->
+      <div class="page" id="page-captions">
+        <div class="gen-box">
+          <div class="gen-label">Topic for captions</div>
+          <textarea class="gen-input" id="caption-topic" rows="2" placeholder="e.g. Alien pool build — 22M views — satisfying construction video..."></textarea>
+          <div class="gen-row">
+            <select class="select-style" id="caption-tone">
+              <option value="casual">😎 Casual</option>
+              <option value="professional">💼 Professional</option>
+              <option value="hype">🔥 Hype</option>
+              <option value="educational">📚 Educational</option>
+            </select>
+            <button class="btn btn-purple" id="gen-cap-btn" onclick="generateCaptions()">✨ Generate Captions</button>
+            <button class="btn" onclick="loadTopTrend('caption-topic')">📥 Load top trend</button>
+          </div>
+        </div>
+        <div class="cap-grid" id="captions-grid">
+          <div class="cap-card"><div class="cap-platform"><span class="cap-platform-icon">📸</span> Instagram</div><div class="cap-output" id="ig-output"><div class="empty" style="padding:10px 0"><div class="empty-text">Generate to see Instagram caption</div></div></div><div class="char-count" id="ig-count"></div><button class="btn" style="align-self:flex-start" onclick="copyOutput('ig-output')">⎘ Copy</button></div>
+          <div class="cap-card"><div class="cap-platform"><span class="cap-platform-icon">💼</span> LinkedIn</div><div class="cap-output" id="li-output" style="min-height:120px"><div class="empty" style="padding:10px 0"><div class="empty-text">Generate to see LinkedIn post</div></div></div><button class="btn" style="align-self:flex-start" onclick="copyOutput('li-output')">⎘ Copy</button></div>
+          <div class="cap-card"><div class="cap-platform"><span class="cap-platform-icon">🐦</span> Twitter / X</div><div class="cap-output" id="tw-output"><div class="empty" style="padding:10px 0"><div class="empty-text">Generate to see Tweet</div></div></div><div class="char-count" id="tw-count"></div><button class="btn" style="align-self:flex-start" onclick="copyOutput('tw-output')">⎘ Copy</button></div>
+          <div class="cap-card"><div class="cap-platform"><span class="cap-platform-icon">#️⃣</span> Hashtags</div><div class="cap-output" id="ht-output"><div class="empty" style="padding:10px 0"><div class="empty-text">Generate to see hashtags</div></div></div><button class="btn" style="align-self:flex-start" onclick="copyOutput('ht-output')">⎘ Copy</button></div>
+        </div>
+      </div>
+
+      <!-- VIRALITY PAGE -->
+      <div class="page" id="page-virality">
+        <div class="gen-box">
+          <div class="gen-label">Script or topic to analyze</div>
+          <textarea class="gen-input" id="virality-input" rows="3" placeholder="Paste your reel script or topic here to predict virality score..."></textarea>
+          <div class="gen-row">
+            <button class="btn btn-purple" id="gen-vir-btn" onclick="analyzeVirality()">📊 Analyze Virality</button>
+            <button class="btn" onclick="loadTopTrend('virality-input')">📥 Load top trend</button>
+          </div>
+        </div>
+        <div id="virality-results" style="display:flex;flex-direction:column;gap:12px">
+          <div class="empty"><div class="empty-icon">📈</div><div class="empty-text">Enter a script or topic to predict virality</div></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="page" id="page-settings">
+        <div class="gen-box">
+          <div class="gen-label">Flask API URL</div>
+          <input class="gen-input" id="flask-url" value="http://localhost:5000" placeholder="http://localhost:5000" />
+          <div class="gen-row">
+            <button class="btn btn-purple" onclick="saveSettings()">💾 Save Settings</button>
+            <button class="btn" onclick="checkFlaskHealth()">⚡ Test Connection</button>
+          </div>
+        </div>
+        <div class="gen-box">
+          <div class="gen-label">Groq Model</div>
+          <select class="select-style" id="groq-model" style="width:100%;padding:9px 12px">
+            <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Best quality)</option>
+            <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Fastest)</option>
+            <option value="mixtral-8x7b-32768">mixtral-8x7b-32768 (Balanced)</option>
+          </select>
+          <div class="gen-row" style="margin-top:10px"><div class="gen-label" style="margin:0">Groq API Key</div></div>
+          <input class="gen-input" id="groq-key" placeholder="enter your groq key" style="margin-top:6px" type="password" />
+          <div class="gen-row"><button class="btn btn-purple" onclick="saveGroqKey()">💾 Save Key</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    const FLASK = () => document.getElementById('flask-url').value || 'http://localhost:5000';
+    let trendData = [];
+    let groqKey = localStorage.getItem('groq_key') || '';
+    let currentScriptText = '';
+    let currentSpeechUtterance = null;
+    let selectedThumbIdx = 0;
+    const thumbCanvases = [];
+
+    if (groqKey) document.getElementById('groq-key').value = groqKey;
+
+    /* PAGE NAV */
+    function showPage(id, btn) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      if (btn) btn.classList.add('active');
+      const titles = {dashboard:'Dashboard',trends:'Trends',scripts:'Script Generator',captions:'Caption Generator',virality:'Virality Predictor',settings:'Settings'};
+      const subs = {dashboard:'Overview of your viral reel agent',trends:'Discover and rank YouTube trending topics',scripts:'AI-powered 30-60 sec reel scripts + voice preview & thumbnails',captions:'Platform-ready captions and hashtags',virality:'Predict reach before you post',settings:'Configure API keys and preferences'};
+      document.getElementById('page-title').textContent = titles[id] || id;
+      document.getElementById('page-sub').textContent = subs[id] || '';
+    }
+
+    function toast(msg, ok=true) {
+      const t = document.getElementById('toast');
+      t.innerHTML = (ok ? '✅ ' : '❌ ') + msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function copyOutput(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.innerText || el.textContent).then(() => toast('Copied to clipboard!'));
+    }
+
+    function bc(v) { return v>=70 ? 'var(--green)' : v>=50 ? 'var(--amber)' : 'var(--red)'; }
+
+    function ring(v) {
+      const r=16, c=2*Math.PI*r, f=(v/100)*c, col=bc(v);
+      return `<div class="vring"><svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3.5"/><circle cx="22" cy="22" r="${r}" fill="none" stroke="${col}" stroke-width="3.5" stroke-dasharray="${f.toFixed(1)} ${c.toFixed(1)}" stroke-linecap="round"/></svg><div class="vring-num" style="color:${col}">${v}</div></div>`;
+    }
+
+    function renderCard(t, i, showExpand=true) {
+      const rc=['r1','r2','r3','r1','r2'][i]||'r1';
+      const catPill = t.category==='Science & Technology'?'pill-b':t.category==='How-to & Style'?'pill-g':'pill-p';
+      const script = t.script||'';
+      const hookMatch = script.match(/HOOK[:\s]+([\s\S]*?)(?=STORY|$)/i);
+      const storyMatch = script.match(/STORY[:\s]+([\s\S]*?)(?=CTA|$)/i);
+      const ctaMatch = script.match(/CTA[:\s]+([\s\S]*?)$/i);
+      const hookText = hookMatch ? hookMatch[1].trim() : '';
+      const storyText = storyMatch ? storyMatch[1].trim() : '';
+      const ctaText = ctaMatch ? ctaMatch[1].trim() : '';
+      const igText = t.captions?.match(/INSTAGRAM[:\s]+(.*)/i)?.[1]||'';
+      const htText = t.captions?.match(/HASHTAGS[:\s]+(.*)/i)?.[1]||'';
+      const liText = t.captions?.match(/LINKEDIN[:\s]+([\s\S]*)/i)?.[1]?.trim()||'';
+      const tags = (htText.match(/#\w+/g)||[]).slice(0,5);
+      return `<div class="trend-card${t.best?' best':''}" id="tc-${i}">
+        <div class="tc-head" onclick="toggleCard(${i})">
+          <div class="rank ${rc}">#${i+1}</div>
+          <div class="tc-info">
+            <div class="tc-title">${t.topic||t.title||'Untitled'}</div>
+            <div class="tc-meta">
+              <span class="pill ${catPill}">${t.category||'Trending'}</span>
+              ${t.best?'<span class="pill pill-a">⭐ Best reel</span>':''}
+              <span style="font-size:10px;color:var(--t3)">${t.views?Number(t.views).toLocaleString()+' views':''}</span>
+            </div>
+          </div>
+          <div class="tc-right">
+            <div class="bar-group">
+              <div class="bar-row"><div class="bar-lbl">Virality</div><div class="bar-bg"><div class="bar-fill" style="width:${t.virality_score||0}%;background:${bc(t.virality_score||0)}"></div></div><div class="bar-val">${t.virality_score||0}</div></div>
+              <div class="bar-row"><div class="bar-lbl">Hook strength</div><div class="bar-bg"><div class="bar-fill" style="width:${(t.hook_score||0)*100}%;background:var(--purple)"></div></div><div class="bar-val">${t.hook_score>=1?'💪':'⚡'}</div></div>
+              <div style="font-size:10px;color:var(--t3);margin-top:2px">Est. <b style="color:var(--t1)">${t.predicted_views?.toLocaleString()||'—'}</b> views</div>
+            </div>
+            ${ring(t.virality_score||0)}
+            <span class="chev" id="chev-${i}">▾</span>
+          </div>
+        </div>
+        ${showExpand&&script?`<div class="tc-body" id="tcb-${i}">
+          <div class="tc-grid">
+            <div class="mini-box"><div class="mini-title">🎬 Reel script</div><div class="script-block">${hookText?`<div><b style="color:var(--amber-text)">HOOK:</b> ${hookText}</div><br>`:''}${storyText?`<div><b>STORY:</b><br>${storyText.replace(/\n/g,'<br>')}</div><br>`:''}${ctaText?`<div><b style="color:var(--green-text)">CTA:</b> ${ctaText}</div>`:''}</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px">${igText?`<div class="mini-box"><div class="mini-title">📸 Instagram</div><div class="script-block">${igText}<div class="tags">${tags.map(h=>`<span class="tag">${h}</span>`).join('')}</div></div></div>`:''}${liText?`<div class="mini-box"><div class="mini-title">💼 LinkedIn</div><div class="script-block" style="font-size:11px">${liText.substring(0,200)}...</div></div>`:''}</div>
+          </div>
+          <div class="tc-foot">
+            <a class="yt-link" href="${t.video_url||'#'}" target="_blank">▶ Watch on YouTube</a>
+            <div style="display:flex;gap:8px">
+              <button class="btn" onclick="loadScript(${i})">📝 Use in Scripts</button>
+              <button class="btn" onclick="loadCaption(${i})">📸 Use in Captions</button>
+            </div>
+          </div>
+        </div>`:''}
+      </div>`;
+    }
+
+    function toggleCard(i) {
+      const b=document.getElementById('tcb-'+i), c=document.getElementById('chev-'+i);
+      if(!b) return;
+      const open=b.classList.contains('open');
+      b.classList.toggle('open',!open);
+      c.classList.toggle('open',!open);
+    }
+
+    async function fetchAllTrends() {
+      const btn=document.getElementById('refresh-btn');
+      btn.innerHTML='<span class="spinner"></span> Fetching...'; btn.disabled=true;
+      try {
+        const res=await fetch(FLASK()+'/generate',{signal:AbortSignal.timeout(30000)});
+        if(!res.ok) throw new Error('API returned '+res.status);
+        const data=await res.json();
+        trendData=(data.results||[]).map((t,i)=>({...t,best:i===0}));
+        trendData.sort((a,b)=>(b.virality_score||0)-(a.virality_score||0));
+        trendData[0].best=true;
+        renderDashboard(); renderTrends(); updateStats();
+        document.getElementById('trend-count').textContent=trendData.length;
+        toast('Fetched '+trendData.length+' trends!');
+        document.getElementById('dot-flask').className='dot green';
+      } catch(e) {
+        toast('Flask offline — using mock data',false);
+        document.getElementById('dot-flask').className='dot red';
+        loadMockData();
+      } finally {
+        btn.innerHTML='↻ Refresh Trends'; btn.disabled=false;
+      }
+    }
+
+    function loadMockData() {
+      trendData=[
+        {rank:1,best:true,topic:'How we build an alien pool — full process revealed',category:'How-to & Style',views:22060653,virality_score:75.6,predicted_views:37800,hook_score:1.0,script:'HOOK: Get ready for the most epic alien pool build!\n\nSTORY:\n1. We excavated the perfect intergalactic shape\n2. Installed luxury black marble and LED lighting\n3. Added glowing alien eggs and a swim-up bar\n\nCTA: Follow for more satisfying builds!',captions:'INSTAGRAM: Building an Alien Pool like a pro!\nHASHTAGS: #poolbuild #luxurypool #satisfying #poolhacks #alienpool\nLINKEDIN: Witness the extraordinary process of building an Alien Pool.',video_url:'https://youtube.com/watch?v=-fMkIOFEZDA'},
+        {rank:2,best:false,topic:'#fyp @Zack D. Films',category:'How-to & Style',views:21900507,virality_score:73.2,predicted_views:36600,hook_score:1.0,script:'HOOK: Want to level up your style like Jordan The Stallion?\n\nSTORY:\n1. Invest in bold statement pieces\n2. Mix high and low fashion\n3. Accessorize with confidence\n\nCTA: Tag a friend who needs a wardrobe upgrade!',captions:'INSTAGRAM: Viral hit 24M views!\nHASHTAGS: #fyp #ZackDFilms #ViralVideo #FilmMaker #Trending\nLINKEDIN: Compelling content resonates globally.',video_url:'https://youtube.com/watch?v=R6x-5NzuIRo'},
+        {rank:3,best:false,topic:'JBL Go4 PVC pipe drop jumping',category:'Science & Technology',views:23921842,virality_score:70.3,predicted_views:35150,hook_score:0.5,script:'HOOK: Can a $30 JBL speaker survive a 10-foot drop?\n\nSTORY:\n1. PVC pipe acts as a decelerator\n2. Dropped from 10 feet with extra jump\n3. JBL Go4 keeps playing after the drop!\n\nCTA: Try this at home — subscribe for more experiments!',captions:'INSTAGRAM: JBL GO4 survives 100ft PVC pipe drop!\nHASHTAGS: #JBLGO4 #PVCPipeDrop #DropTest #BluetoothSpeaker #DurableTech\nLINKEDIN: The JBL GO4 underwent an ultimate durability test.',video_url:'https://youtube.com/watch?v=co18MZypHm0'}
+      ];
+      renderDashboard(); renderTrends(); updateStats();
+      document.getElementById('trend-count').textContent=trendData.length;
+    }
+
+    function renderDashboard() { document.getElementById('dash-cards').innerHTML=trendData.slice(0,3).map((t,i)=>renderCard(t,i,true)).join(''); }
+    function renderTrends() { document.getElementById('trends-list').innerHTML=trendData.map((t,i)=>renderCard(t,i,true)).join(''); }
+    function updateStats() {
+      const tv=trendData.reduce((s,t)=>s+(t.views||0),0);
+      const bv=Math.max(...trendData.map(t=>t.virality_score||0));
+      const br=Math.max(...trendData.map(t=>t.predicted_views||0));
+      document.getElementById('stat-trends').textContent=trendData.length;
+      document.getElementById('stat-views').textContent=tv>1e6?(tv/1e6).toFixed(1)+'M':tv.toLocaleString();
+      document.getElementById('stat-best').textContent=bv.toFixed(1);
+      document.getElementById('stat-reach').textContent=br>=1000?(br/1000).toFixed(1)+'K':br;
+    }
+
+    function loadTopTrend(inputId) {
+      if(!trendData.length){toast('Fetch trends first!',false);return;}
+      const top=trendData[0];
+      document.getElementById(inputId).value=`${top.topic||top.title} — ${Number(top.views||0).toLocaleString()} views — Category: ${top.category}`;
+      toast('Loaded: '+(top.topic||top.title||'').substring(0,40)+'...');
+    }
+    function loadScript(i) {
+      const t=trendData[i];
+      document.getElementById('script-topic').value=(t.topic||t.title||'')+(t.views?` — ${Number(t.views).toLocaleString()} views`:'');
+      showPage('scripts',document.querySelectorAll('.nav-btn')[2]);
+    }
+    function loadCaption(i) {
+      const t=trendData[i];
+      document.getElementById('caption-topic').value=(t.topic||t.title||'')+(t.views?` — ${Number(t.views).toLocaleString()} views`:'');
+      showPage('captions',document.querySelectorAll('.nav-btn')[3]);
+    }
+
+    async function callGroq(prompt) {
+      const key=document.getElementById('groq-key').value||groqKey;
+      if(!key){toast('Add Groq API key in Settings!',false);throw new Error('No Groq key');}
+      const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:document.getElementById('groq-model')?.value||'llama-3.3-70b-versatile',messages:[{role:'user',content:prompt}],max_tokens:800,temperature:0.85})});
+      if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Groq error');}
+      const data=await res.json();
+      return data.choices[0].message.content;
+    }
+
+    /* ═══════════════ GENERATE SCRIPT ═══════════════ */
+    async function generateScript() {
+      const topic=document.getElementById('script-topic').value.trim();
+      if(!topic){toast('Enter a topic first!',false);return;}
+      const style=document.getElementById('script-style').value;
+      const dur=document.getElementById('script-duration').value;
+      const btn=document.getElementById('gen-script-btn');
+      btn.innerHTML='<span class="spinner"></span> Generating...'; btn.disabled=true;
+      const out=document.getElementById('script-output');
+      out.innerHTML='<div class="loading-row"><span class="spinner"></span> AI is writing your script...</div>';
+      try {
+        const prompt=`You are a viral content creator expert.\nWrite a ${dur}-second ${style} reel script about: "${topic}"\n\nFormat EXACTLY like this with clear labels:\nHOOK: [attention-grabbing opening 3 seconds - make it irresistible]\nSTORY:\n1. [first key point - 7 seconds]\n2. [second key point - 7 seconds]  \n3. [third key point - 6 seconds]\nCTA: [compelling call-to-action - last 5 seconds]\n\nRules: Be punchy, conversational, use power words. No fluff.`;
+        const result=await callGroq(prompt);
+        currentScriptText=result;
+        out.innerHTML=result.replace(/HOOK:/g,'<b style="color:var(--amber-text)">HOOK:</b>').replace(/STORY:/g,'<b style="color:var(--purple-text)">STORY:</b>').replace(/CTA:/g,'<b style="color:var(--green-text)">CTA:</b>').replace(/\n/g,'<br>');
+        const breakdown=document.getElementById('script-breakdown');
+        breakdown.style.display='grid';
+        const hookMatch=result.match(/HOOK[:\s]+([\s\S]*?)(?=STORY|$)/i)?.[1]?.trim()||'';
+        const ctaMatch=result.match(/CTA[:\s]+([\s\S]*?)$/i)?.[1]?.trim()||'';
+        document.getElementById('hook-output').textContent=hookMatch;
+        document.getElementById('cta-output').textContent=ctaMatch;
+        toast('Script generated!');
+        // Enable voice & thumbnail buttons
+        document.getElementById('voice-regen-btn').disabled=false;
+        document.getElementById('gen-thumb-btn').disabled=false;
+        // Init waveform placeholder
+        renderWaveformIdle();
+        // Auto-extract hook for thumbnail text placeholder
+        if(hookMatch) document.getElementById('thumb-text').placeholder='Auto: '+hookMatch.substring(0,50)+'...';
+      } catch(e) {
+        out.innerHTML='<span style="color:var(--red-text)">❌ '+e.message+'</span>';
+        toast(e.message,false);
+      } finally {
+        btn.innerHTML='✨ Generate Script'; btn.disabled=false;
+      }
+    }
+
+    /* ═══════════════ VOICE PREVIEW ═══════════════ */
+    function populateVoices() {
+      const sel=document.getElementById('voice-select');
+      const voices=speechSynthesis.getVoices();
+      sel.innerHTML='';
+      voices.forEach((v,i)=>{
+        const opt=document.createElement('option');
+        opt.value=i; opt.textContent=`${v.name} (${v.lang})`;
+        sel.appendChild(opt);
+      });
+    }
+    speechSynthesis.onvoiceschanged=populateVoices;
+    populateVoices();
+
+    function getScriptSection() {
+      if(!currentScriptText) return '';
+      const section=document.getElementById('voice-section').value;
+      if(section==='hook') return currentScriptText.match(/HOOK[:\s]+([\s\S]*?)(?=STORY|$)/i)?.[1]?.trim()||currentScriptText;
+      if(section==='story') return currentScriptText.match(/STORY[:\s]+([\s\S]*?)(?=CTA|$)/i)?.[1]?.trim()||currentScriptText;
+      if(section==='cta') return currentScriptText.match(/CTA[:\s]+([\s\S]*?)$/i)?.[1]?.trim()||currentScriptText;
+      return currentScriptText.replace(/HOOK:|STORY:|CTA:/g,'').replace(/\n/g,' ');
+    }
+
+    function renderWaveformIdle() {
+      const wf=document.getElementById('voice-waveform');
+      wf.innerHTML='';
+      for(let i=0;i<28;i++){
+        const b=document.createElement('div');
+        b.className='wv-bar';
+        const h=4+Math.random()*24;
+        b.style.height=h+'px';
+        b.style.opacity='0.35';
+        wf.appendChild(b);
+      }
+    }
+
+    function renderWaveformPlaying() {
+      const wf=document.getElementById('voice-waveform');
+      wf.innerHTML='';
+      for(let i=0;i<28;i++){
+        const b=document.createElement('div');
+        b.className='wv-bar playing';
+        const h=8+Math.random()*28;
+        b.style.height=h+'px';
+        b.style.animationDelay=(i*0.04)+'s';
+        b.style.animationDuration=(0.5+Math.random()*0.6)+'s';
+        wf.appendChild(b);
+      }
+    }
+
+    function previewVoice() {
+      if(!currentScriptText){toast('Generate a script first!',false);return;}
+      stopVoice();
+      const text=getScriptSection();
+      if(!text){toast('No text to speak!',false);return;}
+      const utt=new SpeechSynthesisUtterance(text);
+      const voices=speechSynthesis.getVoices();
+      const selIdx=parseInt(document.getElementById('voice-select').value)||0;
+      if(voices[selIdx]) utt.voice=voices[selIdx];
+      utt.rate=parseFloat(document.getElementById('voice-speed').value)||1.1;
+      utt.pitch=parseFloat(document.getElementById('voice-pitch').value)||1;
+      utt.onstart=()=>{
+        renderWaveformPlaying();
+        document.getElementById('voice-stop-btn').style.display='inline-flex';
+        document.getElementById('voice-regen-btn').innerHTML='🔊 Speaking...';
+        const sec=document.getElementById('voice-section').value;
+        document.getElementById('voice-status').innerHTML='<span class="spinner"></span> Speaking '+sec+' section...';
+      };
+      utt.onend=()=>{
+        renderWaveformIdle();
+        document.getElementById('voice-stop-btn').style.display='none';
+        document.getElementById('voice-regen-btn').innerHTML='▶ Preview Voice';
+        document.getElementById('voice-status').innerHTML='<span style="color:var(--green-text)">✔</span> Playback complete';
+      };
+      utt.onerror=()=>{
+        renderWaveformIdle();
+        document.getElementById('voice-stop-btn').style.display='none';
+        document.getElementById('voice-regen-btn').innerHTML='▶ Preview Voice';
+        document.getElementById('voice-status').innerHTML='';
+      };
+      currentSpeechUtterance=utt;
+      speechSynthesis.speak(utt);
+      toast('Playing voice preview...');
+    }
+
+    function stopVoice() {
+      speechSynthesis.cancel();
+      renderWaveformIdle();
+      document.getElementById('voice-stop-btn').style.display='none';
+      document.getElementById('voice-regen-btn').innerHTML='▶ Preview Voice';
+      document.getElementById('voice-status').innerHTML='';
+    }
+
+    function downloadVoice() {
+      if(!currentScriptText){toast('Generate a script first!',false);return;}
+      // Browser TTS doesn't natively export — guide user
+      toast('TTS export: use browser screen-record or OS audio capture tools.',true);
+      // Show a more detailed note
+      document.getElementById('voice-status').innerHTML='<span style="color:var(--amber-text)">ℹ</span> Browser TTS cannot export directly. Use OS audio capture (e.g. Audacity or OBS) while playing.';
+    }
+
+    /* ═══════════════ THUMBNAIL GENERATOR ═══════════════ */
+    const THUMB_W=270, THUMB_H=480;
+
+    const PALETTES={
+      purple:{ bg1:'#1a0a3e', bg2:'#7c6ef5', accent:'#a99cf7', text:'#ffffff', sub:'#c0b8ff' },
+      fire:  { bg1:'#1a0000', bg2:'#c0392b', accent:'#f56060', text:'#ffffff', sub:'#ffb3b3' },
+      neon:  { bg1:'#001a0a', bg2:'#00b87a', accent:'#4de8a0', text:'#ffffff', sub:'#a0ffe0' },
+      gold:  { bg1:'#1a1000', bg2:'#c07800', accent:'#f5a94a', text:'#ffffff', sub:'#ffd9a0' }
+    };
+
+    function wrapText(ctx, text, x, y, maxW, lineH) {
+      const words=text.split(' ');
+      let line='';
+      const lines=[];
+      for(let w of words){
+        const test=line+w+' ';
+        if(ctx.measureText(test).width>maxW&&line!==''){lines.push(line.trim());line=w+' ';}
+        else line=test;
+      }
+      if(line) lines.push(line.trim());
+      lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineH));
+      return lines.length*lineH;
+    }
+
+    function getThumbText() {
+      const override=document.getElementById('thumb-text').value.trim();
+      if(override) return override;
+      if(currentScriptText){
+        const h=currentScriptText.match(/HOOK[:\s]+([\s\S]*?)(?=STORY|$)/i)?.[1]?.trim();
+        if(h) return h.substring(0,60);
+      }
+      const topic=document.getElementById('script-topic').value.trim();
+      return topic.substring(0,60)||'Your Viral Reel';
+    }
+
+    function drawThumb(canvas, variant, palette, style) {
+      const ctx=canvas.getContext('2d');
+      canvas.width=THUMB_W; canvas.height=THUMB_H;
+      const p=palette;
+
+      // Background gradient
+      const grad=ctx.createLinearGradient(0,0,THUMB_W,THUMB_H);
+      grad.addColorStop(0, p.bg1);
+      grad.addColorStop(1, p.bg2);
+      ctx.fillStyle=grad;
+      ctx.fillRect(0,0,THUMB_W,THUMB_H);
+
+      // Style-specific bg decoration
+      if(style==='bold'){
+        // Large diagonal stripe
+        ctx.save();
+        ctx.globalAlpha=0.08;
+        ctx.fillStyle=p.accent;
+        ctx.beginPath();
+        ctx.moveTo(0,THUMB_H*0.3); ctx.lineTo(THUMB_W,0); ctx.lineTo(THUMB_W,THUMB_H*0.7); ctx.lineTo(0,THUMB_H);
+        ctx.fill();
+        ctx.restore();
+        // Corner accent block
+        ctx.save();
+        ctx.globalAlpha=0.18;
+        ctx.fillStyle=p.accent;
+        ctx.fillRect(0,0,THUMB_W*0.5,8);
+        ctx.fillRect(0,THUMB_H-8,THUMB_W,8);
+        ctx.restore();
+      }
+      if(style==='cinematic'){
+        // Letterbox bars
+        ctx.fillStyle='rgba(0,0,0,0.5)';
+        ctx.fillRect(0,0,THUMB_W,52);
+        ctx.fillRect(0,THUMB_H-52,THUMB_W,52);
+        // Center circle glow
+        ctx.save();
+        ctx.globalAlpha=0.12;
+        const radGrad=ctx.createRadialGradient(THUMB_W/2,THUMB_H/2,20,THUMB_W/2,THUMB_H/2,180);
+        radGrad.addColorStop(0,p.accent);
+        radGrad.addColorStop(1,'transparent');
+        ctx.fillStyle=radGrad;
+        ctx.fillRect(0,0,THUMB_W,THUMB_H);
+        ctx.restore();
+      }
+      if(style==='minimal'){
+        // Clean top bar
+        ctx.fillStyle=p.accent;
+        ctx.fillRect(28,60,4,THUMB_H*0.5);
+        ctx.globalAlpha=0.06;
+        ctx.fillStyle=p.accent;
+        ctx.fillRect(0,0,THUMB_W,THUMB_H);
+        ctx.globalAlpha=1;
+      }
+
+      // Variant badge (top-right)
+      const badges=['Variant A','Variant B','Variant C'];
+      ctx.fillStyle=p.accent;
+      ctx.globalAlpha=0.9;
+      roundRect(ctx,THUMB_W-80,12,68,22,6);
+      ctx.fill();
+      ctx.globalAlpha=1;
+      ctx.fillStyle=p.bg1;
+      ctx.font='bold 10px monospace';
+      ctx.textAlign='center';
+      ctx.fillText(badges[variant],THUMB_W-46,27);
+
+      // Play icon circle (center-ish)
+      const cx=THUMB_W/2, cy=THUMB_H*0.38;
+      ctx.save();
+      ctx.globalAlpha=0.15;
+      ctx.fillStyle=p.accent;
+      ctx.beginPath(); ctx.arc(cx,cy,40,0,Math.PI*2); ctx.fill();
+      ctx.restore();
+      ctx.strokeStyle=p.accent;
+      ctx.lineWidth=2;
+      ctx.globalAlpha=0.6;
+      ctx.beginPath(); ctx.arc(cx,cy,34,0,Math.PI*2); ctx.stroke();
+      ctx.globalAlpha=1;
+      // Triangle play
+      ctx.fillStyle=p.accent;
+      ctx.beginPath();
+      ctx.moveTo(cx+14,cy); ctx.lineTo(cx-8,cy-12); ctx.lineTo(cx-8,cy+12);
+      ctx.closePath(); ctx.fill();
+
+      // Variant-specific emoji/icon top area
+      const icons=['🔥','⚡','🚀'];
+      ctx.font=`${style==='minimal'?28:36}px serif`;
+      ctx.textAlign='center';
+      ctx.globalAlpha=0.8;
+      ctx.fillText(icons[variant],cx,style==='cinematic'?100:style==='minimal'?90:80);
+      ctx.globalAlpha=1;
+
+      // Main headline text
+      const mainText=getThumbText().toUpperCase();
+      const fontSize=style==='minimal'?18:style==='bold'?22:20;
+      ctx.font=`bold ${fontSize}px sans-serif`;
+      ctx.fillStyle=p.text;
+      ctx.textAlign='center';
+      ctx.shadowColor=p.bg1;
+      ctx.shadowBlur=8;
+      const textY=style==='cinematic'?THUMB_H*0.58:THUMB_H*0.55;
+      wrapText(ctx,mainText,cx,textY,THUMB_W-44,fontSize+6);
+      ctx.shadowBlur=0;
+
+      // Subtext - CTA or topic
+      const sub=currentScriptText?.match(/CTA[:\s]+([\s\S]*?)$/i)?.[1]?.trim().substring(0,50)||'Watch till the end 👇';
+      ctx.font=`${style==='minimal'?11:12}px sans-serif`;
+      ctx.fillStyle=p.sub;
+      ctx.globalAlpha=0.85;
+      ctx.textAlign='center';
+      wrapText(ctx,sub,cx,THUMB_H*0.75,THUMB_W-60,16);
+      ctx.globalAlpha=1;
+
+      // Bottom bar with channel/brand placeholder
+      ctx.fillStyle=p.accent;
+      ctx.globalAlpha=0.12;
+      ctx.fillRect(0,THUMB_H-50,THUMB_W,50);
+      ctx.globalAlpha=1;
+      ctx.fillStyle=p.sub;
+      ctx.font='10px monospace';
+      ctx.textAlign='left';
+      ctx.fillText('REEL.AI  •  VIRAL CONTENT', 16, THUMB_H-22);
+      ctx.textAlign='right';
+      ctx.fillStyle=p.accent;
+      ctx.font='bold 11px monospace';
+      ctx.fillText('▶ WATCH NOW', THUMB_W-16, THUMB_H-22);
+    }
+
+    function roundRect(ctx,x,y,w,h,r){
+      ctx.beginPath();
+      ctx.moveTo(x+r,y);
+      ctx.lineTo(x+w-r,y);
+      ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+      ctx.lineTo(x+w,y+h-r);
+      ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+      ctx.lineTo(x+r,y+h);
+      ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+      ctx.lineTo(x,y+r);
+      ctx.quadraticCurveTo(x,y,x+r,y);
+      ctx.closePath();
+    }
+
+    function generateThumbnails() {
+      const style=document.getElementById('thumb-style').value;
+      const colorKey=document.getElementById('thumb-color').value;
+      const palette=PALETTES[colorKey]||PALETTES.purple;
+      const wrap=document.getElementById('thumb-canvas-wrap');
+      wrap.innerHTML='';
+      thumbCanvases.length=0;
+      selectedThumbIdx=0;
+
+      ['Variant A','Variant B','Variant C'].forEach((label,i)=>{
+        const card=document.createElement('div');
+        card.className='thumb-card'+(i===0?' selected':'');
+        card.onclick=()=>selectThumb(i);
+        card.id='thumb-card-'+i;
+
+        const canvas=document.createElement('canvas');
+        canvas.className='thumb-canvas';
+        canvas.id='thumb-cnv-'+i;
+        thumbCanvases.push(canvas);
+
+        const lbl=document.createElement('div');
+        lbl.className='thumb-label';
+        lbl.textContent=label;
+
+        if(i===0){
+          const badge=document.createElement('div');
+          badge.className='thumb-selected-badge';
+          badge.id='thumb-sel-badge-0';
+          badge.textContent='✓ Selected';
+          card.appendChild(badge);
+        }
+
+        card.appendChild(canvas);
+        card.appendChild(lbl);
+        wrap.appendChild(card);
+        drawThumb(canvas, i, palette, style);
+      });
+
+      document.getElementById('thumb-download-row').style.display='flex';
+      document.getElementById('thumb-selected-label').textContent='Variant A';
+      toast('3 thumbnails generated! Click one to select.');
+    }
+
+    function selectThumb(idx) {
+      selectedThumbIdx=idx;
+      document.querySelectorAll('.thumb-card').forEach((c,i)=>{
+        c.classList.toggle('selected',i===idx);
+        const b=c.querySelector('.thumb-selected-badge');
+        if(b) b.remove();
+      });
+      const card=document.getElementById('thumb-card-'+idx);
+      const badge=document.createElement('div');
+      badge.className='thumb-selected-badge';
+      badge.textContent='✓ Selected';
+      card.insertBefore(badge,card.firstChild);
+      const labels=['Variant A','Variant B','Variant C'];
+      document.getElementById('thumb-selected-label').textContent=labels[idx];
+    }
+
+    function downloadSelectedThumb() {
+      if(!thumbCanvases[selectedThumbIdx]){toast('Generate thumbnails first!',false);return;}
+      const canvas=thumbCanvases[selectedThumbIdx];
+      // Scale up to 1080×1920 for real export
+      const exportCanvas=document.createElement('canvas');
+      exportCanvas.width=1080; exportCanvas.height=1920;
+      const ctx=exportCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled=true;
+      ctx.imageSmoothingQuality='high';
+      ctx.drawImage(canvas,0,0,1080,1920);
+      const a=document.createElement('a');
+      a.href=exportCanvas.toDataURL('image/png');
+      a.download=`thumbnail_variant_${['A','B','C'][selectedThumbIdx]}.png`;
+      a.click();
+      toast('Thumbnail downloaded (1080×1920 PNG)!');
+    }
+
+    function downloadAllThumbs() {
+      if(!thumbCanvases.length){toast('Generate thumbnails first!',false);return;}
+      thumbCanvases.forEach((canvas,i)=>{
+        const exportCanvas=document.createElement('canvas');
+        exportCanvas.width=1080; exportCanvas.height=1920;
+        const ctx=exportCanvas.getContext('2d');
+        ctx.imageSmoothingEnabled=true;
+        ctx.drawImage(canvas,0,0,1080,1920);
+        setTimeout(()=>{
+          const a=document.createElement('a');
+          a.href=exportCanvas.toDataURL('image/png');
+          a.download=`thumbnail_variant_${['A','B','C'][i]}.png`;
+          a.click();
+        },i*200);
+      });
+      toast('Downloading all 3 thumbnails...');
+    }
+
+    /* GENERATE CAPTIONS */
+    async function generateCaptions() {
+      const topic=document.getElementById('caption-topic').value.trim();
+      if(!topic){toast('Enter a topic first!',false);return;}
+      const tone=document.getElementById('caption-tone').value;
+      const btn=document.getElementById('gen-cap-btn');
+      btn.innerHTML='<span class="spinner"></span> Generating...'; btn.disabled=true;
+      const loading='<div class="loading-row"><span class="spinner"></span> Generating...</div>';
+      ['ig-output','li-output','tw-output','ht-output'].forEach(id=>document.getElementById(id).innerHTML=loading);
+      try {
+        const prompt=`You are a social media expert. Generate platform-optimized content for this topic:\n"${topic}"\nTone: ${tone}\n\nProvide ALL of the following, clearly labeled:\n\nINSTAGRAM_CAPTION:\n[engaging caption under 150 characters, ${tone} tone, with 1-2 emojis]\n\nINSTAGRAM_HASHTAGS:\n[exactly 8 relevant hashtags starting with #]\n\nLINKEDIN_POST:\n[professional 150-200 word post, ${tone==='professional'?'formal':'conversational'} tone, with key insights]\n\nTWITTER:\n[punchy tweet under 280 characters, ${tone} tone, with 1-2 hashtags]\n\nReturn only these four sections, no extra commentary.`;
+        const result=await callGroq(prompt);
+        const igCap=result.match(/INSTAGRAM_CAPTION[:\s]+([\s\S]*?)(?=INSTAGRAM_HASHTAGS|LINKEDIN|$)/i)?.[1]?.trim()||'';
+        const igTags=result.match(/INSTAGRAM_HASHTAGS[:\s]+([\s\S]*?)(?=LINKEDIN|TWITTER|$)/i)?.[1]?.trim()||'';
+        const li=result.match(/LINKEDIN_POST[:\s]+([\s\S]*?)(?=TWITTER|$)/i)?.[1]?.trim()||'';
+        const tw=result.match(/TWITTER[:\s]+([\s\S]*?)$/i)?.[1]?.trim()||'';
+        const tags=igTags.match(/#\w+/g)||[];
+        document.getElementById('ig-output').innerHTML=igCap+'<div class="tags">'+tags.map(h=>`<span class="tag">${h}</span>`).join('')+'</div>';
+        document.getElementById('ig-count').textContent=igCap.length+'/150 chars';
+        document.getElementById('ig-count').className='char-count'+(igCap.length>150?' over':'');
+        document.getElementById('li-output').textContent=li;
+        document.getElementById('tw-output').textContent=tw;
+        document.getElementById('tw-count').textContent=tw.length+'/280 chars';
+        document.getElementById('tw-count').className='char-count'+(tw.length>280?' over':'');
+        document.getElementById('ht-output').innerHTML='<div class="tags">'+tags.map(h=>`<span class="tag">${h}</span>`).join('')+'</div>';
+        toast('Captions generated for all platforms!');
+      } catch(e) {
+        ['ig-output','li-output','tw-output','ht-output'].forEach(id=>document.getElementById(id).innerHTML='<span style="color:var(--red-text)">❌ '+e.message+'</span>');
+        toast(e.message,false);
+      } finally {
+        btn.innerHTML='✨ Generate Captions'; btn.disabled=false;
+      }
+    }
+
+    /* ANALYZE VIRALITY */
+    async function analyzeVirality() {
+      const input=document.getElementById('virality-input').value.trim();
+      if(!input){toast('Enter a script or topic!',false);return;}
+      const btn=document.getElementById('gen-vir-btn');
+      btn.innerHTML='<span class="spinner"></span> Analyzing...'; btn.disabled=true;
+      const results=document.getElementById('virality-results');
+      results.innerHTML='<div class="loading-row"><span class="spinner"></span> AI is analyzing virality factors...</div>';
+      try {
+        const prompt=`You are a viral content analyst. Analyze this content for virality potential:\n"${input}"\n\nRate each factor from 0-100 and give a brief reason. Return ONLY this JSON format:\n{\n  "overall_score": <0-100>,\n  "predicted_views": <realistic number>,\n  "hook_strength": <0-100>,\n  "emotional_appeal": <0-100>,\n  "shareability": <0-100>,\n  "trend_relevance": <0-100>,\n  "cta_strength": <0-100>,\n  "summary": "<2 sentence analysis>",\n  "improvements": ["<tip 1>","<tip 2>","<tip 3>"]\n}`;
+        const result=await callGroq(prompt);
+        let data;
+        try { data=JSON.parse(result.replace(/```json|```/g,'').trim()); }
+        catch { data={overall_score:65,predicted_views:32000,hook_strength:70,emotional_appeal:60,shareability:65,trend_relevance:70,cta_strength:55,summary:'Content shows good viral potential with strong trend relevance.',improvements:['Add a stronger hook in first 3 seconds','Include a clear call-to-action','Use trending audio or sound']}; }
+        results.innerHTML=`
+          <div class="stats-row">
+            <div class="stat"><div class="stat-label">🏆 Overall Score</div><div class="stat-val" style="color:${bc(data.overall_score)}">${data.overall_score}</div><div class="stat-sub">/100</div></div>
+            <div class="stat"><div class="stat-label">👁 Predicted Views</div><div class="stat-val">${data.predicted_views>=1000?(data.predicted_views/1000).toFixed(1)+'K':data.predicted_views}</div><div class="stat-sub">estimated reach</div></div>
+            <div class="stat"><div class="stat-label">🎣 Hook Strength</div><div class="stat-val" style="color:${bc(data.hook_strength)}">${data.hook_strength}</div><div class="stat-sub">/100</div></div>
+            <div class="stat"><div class="stat-label">📤 Shareability</div><div class="stat-val" style="color:${bc(data.shareability)}">${data.shareability}</div><div class="stat-sub">/100</div></div>
+          </div>
+          <div class="virality-meter">
+            <div class="vm-label">Factor breakdown</div>
+            <div class="vm-bars">
+              ${[['Hook strength',data.hook_strength],['Emotional appeal',data.emotional_appeal],['Shareability',data.shareability],['Trend relevance',data.trend_relevance],['CTA strength',data.cta_strength]].map(([n,v])=>`<div class="vm-row"><div class="vm-name">${n}</div><div class="vm-bar-bg"><div class="vm-bar-fill" style="width:${v}%;background:${bc(v)}"></div></div><div class="vm-score">${v}</div></div>`).join('')}
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="sec-title">AI Analysis</div>
+            <div class="output-box" style="min-height:60px">${data.summary}</div>
+          </div>
+          <div class="output-section">
+            <div class="sec-title" style="color:var(--green-text)">💡 Improvements</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              ${(data.improvements||[]).map((tip,i)=>`<div style="display:flex;align-items:flex-start;gap:8px;padding:9px 12px;background:var(--s2);border-radius:8px;font-size:12px;color:var(--t2)"><span style="color:var(--green-text);font-weight:500">${i+1}.</span>${tip}</div>`).join('')}
+            </div>
+          </div>`;
+        toast('Virality analysis complete!');
+      } catch(e) {
+        results.innerHTML='<div class="empty"><div class="empty-icon">❌</div><div class="empty-text">'+e.message+'</div></div>';
+        toast(e.message,false);
+      } finally {
+        btn.innerHTML='📊 Analyze Virality'; btn.disabled=false;
+      }
+    }
+
+    /* FLASK HEALTH */
+    async function checkFlaskHealth() {
+      const btn=document.getElementById('health-btn');
+      btn.innerHTML='<span class="spinner"></span>';
+      try {
+        const res=await fetch(FLASK()+'/health',{signal:AbortSignal.timeout(4000)});
+        if(res.ok){toast('Flask API is running!');document.getElementById('dot-flask').className='dot green';}
+        else throw new Error('Bad response');
+      } catch {
+        toast('Flask offline at '+FLASK(),false);
+        document.getElementById('dot-flask').className='dot red';
+      } finally { btn.innerHTML='⚡ API Health'; }
+    }
+
+    function saveSettings() { localStorage.setItem('flask_url',document.getElementById('flask-url').value); toast('Settings saved!'); }
+    function saveGroqKey() {
+      const k=document.getElementById('groq-key').value;
+      groqKey=k; localStorage.setItem('groq_key',k);
+      toast('Groq API key saved!');
+      document.getElementById('dot-groq').className='dot green';
+    }
+
+    /* INIT */
+    const savedUrl=localStorage.getItem('flask_url');
+    if(savedUrl) document.getElementById('flask-url').value=savedUrl;
+    if(groqKey) document.getElementById('dot-groq').className='dot green';
+    loadMockData();
+    </script>
+  </body>
+</html>
