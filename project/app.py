@@ -5,11 +5,11 @@ import os
 import json
 import re
 import random
-from role_b_agent import run_viral_reel_agent
-from crew_agent import run_full_agent_pipeline
-from script_genarator import generate_script, generate_captions
-from youtube_trend import get_all_trends
-from virality_enhanced import predict_virality_enhanced
+from project.role_b_agent import run_viral_reel_agent
+from project.crew_agent import run_full_agent_pipeline
+from project.script_genarator import generate_script, generate_captions
+from project.youtube_trend import get_all_trends
+from project.virality_enhanced import predict_virality_enhanced
 
 app = Flask(__name__)
 CORS(app)
