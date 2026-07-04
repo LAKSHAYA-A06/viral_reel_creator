@@ -1,1 +1,6 @@
-pip install -r requirements.txt
+services:
+  - type: web
+    name: viral-reel-creator
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
