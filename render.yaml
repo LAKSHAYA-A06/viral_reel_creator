@@ -3,7 +3,7 @@ services:
     name: viral-reel-creator
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: cd project && gunicorn app:app
     envVars:
       - key: GROQ_API_KEY
         sync: false
